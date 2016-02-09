@@ -1,0 +1,23 @@
+
+parameters:
+    chebur.sphinx.profiler.collector.class: Chebur\SphinxBundle\Profiler\SphinxDataCollector
+    chebur.sphinx.profiler.logger.class:    Chebur\SphinxBundle\Profiler\Logger
+    chebur.sphinx.connection.class:         Chebur\SphinxBundle\Sphinx\Decorator\ConnectionDecorator
+    chebur.sphinx.manager.class:            Chebur\SphinxBundle\Sphinx\Manager
+    chebur.sphinx.registry.class:           Chebur\SphinxBundle\Sphinx\Registry
+
+services:
+    #look in extension class chebur.sphinx and chebur.sphinx.manager.default and chebur.sphinx.manager.XXX
+
+    chebur.sphinx.profiler.logger:
+        class: %chebur.sphinx.profiler.logger.class%
+        arguments:
+            - @?logger
+            - @?debug.stopwatch
+
+    chebur.sphinx.profiler.collector:
+        class: %chebur.sphinx.profiler.collector.class%
+        arguments:
+            - @chebur.sphinx.profiler.logger
+        tags:
+            - { name: data_collector, template: "CheburSphinxBundle:Profiler:_data_collector.html.twig", id: "chebur.sphinx"  }
