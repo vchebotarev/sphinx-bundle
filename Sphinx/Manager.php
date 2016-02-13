@@ -4,7 +4,6 @@ namespace Chebur\SphinxBundle\Sphinx;
 
 use Chebur\SphinxBundle\Sphinx\Decorator\ConnectionDecorator;
 use Chebur\SphinxBundle\Sphinx\Decorator\SphinxClientDecorator;
-use Foolz\SphinxQL\SphinxQL;
 
 class Manager
 {
