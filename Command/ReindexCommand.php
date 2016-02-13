@@ -125,17 +125,16 @@ class ReindexCommand extends ContainerAwareCommand
             return;
         }
 
-        $queryPost = $config['commands']['reindex']['query_post']; //todo notice
-        if ($queryPost) {
-            $output->writeln('<info>Query post:</info> '.$queryPost);
-            $queryPostResult = $this->getContainer()
+        $queriesPost = $config['commands']['reindex']['query_post'];
+        foreach($queriesPost as $qp) {
+            $output->writeln('<info>Query post:</info> ' . $qp);
+            $this->getContainer()
                 ->get('chebur.sphinx')
                 ->getManager()
                 ->createQueryBuilder()
-                ->query($queryPost)
-                ->getResult()
+                ->query($qp)
+                ->execute()
             ;
-            $output->write($queryPostResult);
         }
 
         $output->writeln('<info>SUCCESS</info>');

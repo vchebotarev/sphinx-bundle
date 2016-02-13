@@ -69,10 +69,17 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('commands')
-                    //todo validate keys to be "run", "reindex", "generate"
-                    ->prototype('array')
-                        ->children()
-                            ->scalarNode('query_post')->end() //todo can be unset
+                    //todo other commands
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('reindex')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->arrayNode('query_post')
+                                    ->defaultValue(array())
+                                    ->prototype('scalar')->end()
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
