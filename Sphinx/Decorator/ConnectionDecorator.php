@@ -3,6 +3,7 @@
 namespace Chebur\SphinxBundle\Sphinx\Decorator;
 
 use Chebur\SphinxBundle\Profiler\Logger;
+use Chebur\SphinxBundle\Sphinx\Connection\PdoConnection;
 use Foolz\SphinxQL\Drivers\ConnectionInterface;
 use Foolz\SphinxQL\Drivers\Mysqli\Connection as FoolzConnectionMysqli;
 use Foolz\SphinxQL\Drivers\Pdo\Connection    as FoolzConnectionPdo;
@@ -19,7 +20,7 @@ class ConnectionDecorator implements ConnectionInterface
     const DEFAULT_DRIVER = 'pdo';
 
     /**
-     * @var FoolzConnectionMysqli|FoolzConnectionPdo
+     * @var FoolzConnectionMysqli|PdoConnection
      */
     protected $connection;
 
@@ -62,7 +63,7 @@ class ConnectionDecorator implements ConnectionInterface
                 $driver = new FoolzConnectionMysqli();
                 break;
             case self::DRIVER_PDO:
-                $driver = new FoolzConnectionPdo();
+                $driver = new PdoConnection();
                 break;
             default:
                 throw new InvalidArgumentException(
