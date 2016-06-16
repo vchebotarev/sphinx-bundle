@@ -97,7 +97,7 @@ class RunCommand extends ContainerAwareCommand
         }
         $output->writeln($process->getOutput());
 
-        if ($process->isSuccessful()) {
+        if (!$process->isSuccessful()) {
             $output->writeln('<error>ERROR</error>');
             $output->writeln($process->getExitCodeText());
             return;
