@@ -23,15 +23,15 @@ class GenerateCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sphinx_config = $this->getContainer()->getParameter('chebur_sphinx_config')['config'];
+        $sphinxConfig = $this->getContainer()->getParameter('chebur_sphinx_config')['config'];
 
         //Все необходимые данные для постановки
         $config_params = array(
-            'sources'     => $sphinx_config['sources'],
-            'searchd'     => $sphinx_config['searchd'],
-            'parameters'  => $sphinx_config['parameters'],
+            'sources'     => $sphinxConfig['sources'],
+            'searchd'     => $sphinxConfig['searchd'],
+            'parameters'  => $sphinxConfig['parameters'],
         );
-        $sphinx_config_template = $sphinx_config['template'];
+        $sphinxConfigTemplate = $sphinxConfig['template'];
 
         //Добавляем в твиг путь возможного расположения шаблона
         /** @var \Twig_Loader_Filesystem $loader */
@@ -39,31 +39,31 @@ class GenerateCommand extends ContainerAwareCommand
             ->get('twig')
             ->getLoader()
         ;
-        $loader->addPath(dirname($sphinx_config_template));
+        $loader->addPath(dirname($sphinxConfigTemplate));
 
         //Рендерим шаблон конфига
-        $config_content = $this
+        $configContent = $this
             ->getContainer()
             ->get('templating')
-            ->renderResponse(basename($sphinx_config_template), $config_params)
+            ->renderResponse(basename($sphinxConfigTemplate), $config_params)
             ->getContent()
         ;
 
-        //todo test
         try { //Записываем в указанный файл
-            $dir = pathinfo($sphinx_config['destination'])['dirname'];
+            $dir = pathinfo($sphinxConfig['destination'])['dirname'];
             if (!is_dir($dir)) {
                 mkdir($dir, 0777, true);
             }
-            $file                = fopen($sphinx_config['destination'], 'w+');
-            $config_content_size = fwrite($file, $config_content);
+            $file              = fopen($sphinxConfig['destination'], 'w+');
+            $configContentSize = fwrite($file, $configContent);
             fclose($file);
         } catch(\Exception $e) {
             $output->writeln('<error>Error generating config file</error> ' . $e->getMessage());
             return;
         }
 
-        $output->writeln('<info>Config file generated successfully (size ' . $config_content_size . ' b)</info>');
+        $output->writeln('<info>Config file generated successfully (size ' . $configContentSize . ' b)</info>');
+        $output->writeln('<info>Destination: </info>'.$sphinxConfig['destination']);
     }
 
 }

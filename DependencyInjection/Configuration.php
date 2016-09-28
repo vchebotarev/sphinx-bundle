@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('host')->defaultValue(ConnectionDecorator::DEFAULT_HOST)->end()
                             ->integerNode('port')->defaultValue(ConnectionDecorator::DEFAULT_PORT)->end()
+                            ->integerNode('port_api')->defaultValue(ConnectionDecorator::DEFAULT_PORT_API)->end()
                             ->enumNode('driver')
                                 ->values(array(
                                     ConnectionDecorator::DRIVER_MYSQLI,
@@ -49,7 +50,7 @@ class Configuration implements ConfigurationInterface
                             ->isRequired()
                             ->requiresAtLeastOneElement()
                             ->useAttributeAsKey('name')
-                            ->prototype('scalar')->end()
+                            ->prototype('variable')->end()
                         ->end()
                         ->arrayNode('sources')
                             ->isRequired()

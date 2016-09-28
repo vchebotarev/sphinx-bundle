@@ -122,8 +122,9 @@ class SphinxClientDecorator
         $this->connection    = $connection;
         $this->logger        = $connection->getLogger();
         $this->client        = new SphinxClient();
+        //$this->client->SetServer($connection->getHost(), $connection->getPortApi()); //todo
         $this->client->_host = $connection->getHost();
-        $this->client->_port = $connection->getPort();
+        $this->client->_port = $connection->getPortApi();
     }
 
     /**
@@ -159,9 +160,8 @@ class SphinxClientDecorator
     public function query($query, $index = '*', $comment = '')
     {
         $this->logger->startQuery($query . ' (INDEX - ' . $index . ')');
-        $result = $this->client->query($query, $index, $comment);
+        $result = $this->client->Query($query, $index, $comment);
         $this->logger->stopQuery();
-
 
         if ($result === false) {
             //$lastError = $this->client->getLastError();

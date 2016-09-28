@@ -35,6 +35,7 @@ class CheburSphinxExtension extends Extension
                 ->addArgument($val['driver'])
                 ->addArgument($val['host'])
                 ->addArgument($val['port'])
+                ->addArgument($val['port_api'])
             ;
 
             $container->register('chebur.sphinx.manager.'.$connectionName, $container->getParameter('chebur.sphinx.manager.class'))
