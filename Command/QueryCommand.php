@@ -2,9 +2,9 @@
 
 namespace Chebur\SphinxBundle\Command;
 
-use Chebur\SphinxBundle\Sphinx\Manager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,11 +18,21 @@ class QueryCommand extends ContainerAwareCommand
             ->setDescription('Execute sphinx query')
             ->addArgument(
                 'query',
-                InputOption::VALUE_REQUIRED,
+                InputArgument::REQUIRED,
                 'Query to execute'
             )
-            //todo add option to choose Sphinx manager
-            //todo add option to execute 'SHOW META'
+            ->addOption(
+                'meta',
+                'm',
+                InputOption::VALUE_NONE,
+                'Execute "SHOW META" after the query'
+            )
+            ->addOption(
+                'connection',
+                'c',
+                InputOption::VALUE_REQUIRED,
+                'Connection name to execute query'
+            )
         ;
     }
 
@@ -39,14 +49,18 @@ class QueryCommand extends ContainerAwareCommand
             return;
         }
 
-        $managerName = Manager::DEFAULT_NAME; //$input->getArgument('manager'); //todo
+        $managerName = null;
+        if ($input->getOption('connection')) {
+            $managerName = $input->getOption('connection');
+        }
         $manager = $this
             ->getContainer()
             ->get('chebur.sphinx')
             ->getManager($managerName)
         ;
         if (!$manager) {
-            $output->writeln('<error>No sphinx manager with name "' . $managerName . '"</error>');
+            $output->writeln('<error>No connection with name "' . $managerName . '"</error>');
+            return;
         }
 
         try{
@@ -66,15 +80,27 @@ class QueryCommand extends ContainerAwareCommand
         $output->writeln('<info>Rows affected:</info> ' . $countAffected);
         $output->writeln('<info>Rows fetched:</info> ' . $countFetched);
 
-        if (!$countFetched) {
-            return;
+        if ($countFetched) {
+            $rows = $result->fetchAllAssoc();
+            $table = new Table($output);
+            $table->setHeaders(array_keys($rows[0]));
+            $table->setRows($rows);
+            $table->render();
         }
 
-        $rows = $result->fetchAllAssoc();
-        $table = new Table($output);
-        $table->setHeaders(array_keys($rows[0]));
-        $table->setRows($rows);
-        $table->render();
+        if ($input->getOption('meta')) {
+            $result = $manager
+                ->createQueryBuilder()
+                ->query('SHOW META')
+                ->execute()
+            ;
+            $output->writeln('SHOW META');
+            $rows = $result->fetchAllAssoc();
+            $table = new Table($output);
+            $table->setHeaders(array_keys($rows[0]));
+            $table->setRows($rows);
+            $table->render();
+        }
     }
 
 }

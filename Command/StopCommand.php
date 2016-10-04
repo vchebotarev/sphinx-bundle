@@ -11,23 +11,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
 
-class ReindexCommand extends ContainerAwareCommand
+class StopCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('chebur:sphinx:reindex')
-            ->setDescription('Reindex sphinx')
-            ->addArgument(
-                'index',
-                InputArgument::IS_ARRAY
-            )
-            ->addOption(
-                'rotate',
-                'r',
-                InputOption::VALUE_NONE,
-                'Rotate or not during reindexing'
-            )
+            ->setName('chebur:sphinx:stop')
+            ->setDescription('Stop sphinx (searchd)')
         ;
     }
 
@@ -49,25 +39,15 @@ class ReindexCommand extends ContainerAwareCommand
 
         $pb = ProcessBuilder::create()
             ->inheritEnvironmentVariables()
-            ->setPrefix($config['commands']['bin'] . DIRECTORY_SEPARATOR . 'indexer')
+            ->setPrefix($config['commands']['bin'] . DIRECTORY_SEPARATOR . 'searchd')
             ->add('--config')
             ->add($configFile)
+            ->add('--stop')
         ;
-        if (!empty($input->getArgument('index'))) {
-            foreach($input->getArgument('index') as $arg) {
-                $pb->add($arg);
-            }
-        } else {
-            $pb->add('--all');
-        }
-
-        if ($input->getOption('rotate')) {
-            $pb->add('--rotate');
-        }
 
         $process = $pb->getProcess();
         $process->start();
-        $output->writeln('<info>executing</info> ' . $process->getCommandLine());
+        $output->writeln('<info>executing</info> '.$process->getCommandLine());
 
         while($process->isRunning()) {
             if (!$process->getOutput()) {

@@ -19,8 +19,6 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('bin')->defaultValue(DIRECTORY_SEPARATOR == '/' ? '/usr/local/sphinx/bin' : 'c:\sphinx\bin')->end()
-
                 ->arrayNode('connections')
                     ->requiresAtLeastOneElement()
                     ->addDefaultChildrenIfNoneSet(Manager::DEFAULT_NAME)
@@ -69,19 +67,10 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+
                 ->arrayNode('commands')
-                    //todo other commands
-                    ->addDefaultsIfNotSet()
                     ->children()
-                        ->arrayNode('reindex')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->arrayNode('query_post')
-                                    ->defaultValue(array())
-                                    ->prototype('scalar')->end()
-                                ->end()
-                            ->end()
-                        ->end()
+                        ->scalarNode('bin')->defaultValue(DIRECTORY_SEPARATOR == '/' ? '/usr/local/sphinx/bin' : 'c:\sphinx\bin')->end()
                     ->end()
                 ->end()
             ->end()

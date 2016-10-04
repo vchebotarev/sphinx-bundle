@@ -26,9 +26,9 @@ class GenerateCommand extends ContainerAwareCommand
         $sphinxConfig = $this->getContainer()->getParameter('chebur_sphinx_config')['config'];
 
         //Все необходимые данные для постановки
-        $config_params = array(
-            'sources'     => $sphinxConfig['sources'],
+        $configParams = array(
             'searchd'     => $sphinxConfig['searchd'],
+            'sources'     => $sphinxConfig['sources'],
             'parameters'  => $sphinxConfig['parameters'],
         );
         $sphinxConfigTemplate = $sphinxConfig['template'];
@@ -37,17 +37,15 @@ class GenerateCommand extends ContainerAwareCommand
         /** @var \Twig_Loader_Filesystem $loader */
         $loader = $this->getContainer()
             ->get('twig')
-            ->getLoader()
-        ;
+            ->getLoader();
         $loader->addPath(dirname($sphinxConfigTemplate));
 
         //Рендерим шаблон конфига
         $configContent = $this
             ->getContainer()
             ->get('templating')
-            ->renderResponse(basename($sphinxConfigTemplate), $config_params)
-            ->getContent()
-        ;
+            ->renderResponse(basename($sphinxConfigTemplate), $configParams)
+            ->getContent();
 
         try { //Записываем в указанный файл
             $dir = pathinfo($sphinxConfig['destination'])['dirname'];
@@ -62,8 +60,9 @@ class GenerateCommand extends ContainerAwareCommand
             return;
         }
 
-        $output->writeln('<info>Config file generated successfully (size ' . $configContentSize . ' b)</info>');
-        $output->writeln('<info>Destination: </info>'.$sphinxConfig['destination']);
+        $output->writeln('<info>Config file generated successfully</info>');
+        $output->writeln('<info>Destination:</info> ' . $sphinxConfig['destination']);
+        $output->writeln('<info>Size:</info> ' . $configContentSize . 'b');
     }
 
 }

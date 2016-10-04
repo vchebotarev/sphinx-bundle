@@ -18,12 +18,6 @@ class RunCommand extends ContainerAwareCommand
         $this
             ->setName('chebur:sphinx:run')
             ->setDescription('Run sphinx (searchd)')
-            ->addOption(
-                'force',
-                'f',
-                InputOption::VALUE_NONE,
-                'Force rendering new destination config file from template' //todo + reindex
-            )
         ;
     }
 
@@ -34,61 +28,27 @@ class RunCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config      = $this->getContainer()->getParameter('chebur_sphinx_config');
-        $config_file = $config['config']['destination'];
-
-        $force_generate = $input->getOption('force');
+        $config     = $this->getContainer()->getParameter('chebur_sphinx_config');
+        $configFile = $config['config']['destination'];
 
         //Проверяем на существование файла конфига
-        if ($force_generate || !file_exists($config_file)) { //todo дублирование кода
-            //Выводим диалог только если просто нет сгенерированного конфига
-            if (!$force_generate) {
-                $output->writeln('<error>Config file does not exist!</error>');
-                /** @var DialogHelper $dialog */
-                $dialog = $this->getHelper('dialog');
-                if (!$dialog->askConfirmation(
-                    $output,
-                    '<question>Generate config file from template?</question>',
-                    true
-                )) {
-                    return;
-                }
-            }
-
-            $process_generate = ProcessBuilder::create()
-                ->inheritEnvironmentVariables()
-                ->setPrefix('php')
-                ->setArguments(array(
-                    'app/console',
-                    'chebur:sphinx:generate'
-                ))
-                ->getProcess();
-            $process_generate->run();
-            $output->writeln($process_generate->getOutput());
-            if (!$process_generate->isSuccessful()) {
-                return;
-            }
+        if (!file_exists($configFile)) {
+            $output->writeln('<error>Config file not found. Run "chebur:sphinx:generate" first.</error>');
+            return;
         }
 
         $pb = ProcessBuilder::create()
             ->inheritEnvironmentVariables()
-            ->setPrefix($config['bin'] . DIRECTORY_SEPARATOR . 'searchd')
+            ->setPrefix($config['commands']['bin'] . DIRECTORY_SEPARATOR . 'searchd')
             ->add('--config')
-            ->add($config_file)
+            ->add($configFile)
         ;
 
         $process = $pb->getProcess();
-
-        $output->writeln('<question>executing</question> '.$process->getCommandLine());
-
         $process->start();
-
-        //todo реагирование на ошибку запуска
+        $output->writeln('<info>executing</info> '.$process->getCommandLine());
 
         while($process->isRunning()) {
-
-            //todo console dialog queries
-
             if (!$process->getOutput()) {
                 continue;
             }
@@ -98,14 +58,9 @@ class RunCommand extends ContainerAwareCommand
         $output->writeln($process->getOutput());
 
         if (!$process->isSuccessful()) {
-            $output->writeln('<error>ERROR</error>');
-            $output->writeln($process->getExitCodeText());
+            $output->writeln('<error>' . $process->getExitCodeText() . '</error>');
             return;
         }
-
-        $output->writeln('<info>SUCCESS</info>');
     }
 
 }
-
-

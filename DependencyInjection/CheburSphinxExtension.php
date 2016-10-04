@@ -48,6 +48,11 @@ class CheburSphinxExtension extends Extension
             }
         }
 
+        if (!$nameDefault) {
+            $nameDefault = $names[array_keys($names)[0]];
+        }
+        $container->setAlias('chebur.sphinx.manager', 'chebur.sphinx.manager.'.$nameDefault);
+
         $container->register('chebur.sphinx', $container->getParameter('chebur.sphinx.registry.class'))
             ->addArgument(new Reference('service_container'))
             ->addArgument($names)
