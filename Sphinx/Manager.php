@@ -38,4 +38,12 @@ class Manager
         return new SphinxQL($this->connection);
     }
 
+    /**
+     * @return ConnectionDecorator
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
 }
