@@ -10,14 +10,14 @@ services:
     #look in extension class chebur.sphinx and chebur.sphinx.manager.default and chebur.sphinx.manager.XXX
 
     chebur.sphinx.profiler.logger:
-        class: %chebur.sphinx.profiler.logger.class%
+        class: '%chebur.sphinx.profiler.logger.class%'
         arguments:
-            - @?logger
-            - @?debug.stopwatch
+            - '@?logger'
+            - '@?debug.stopwatch'
 
     chebur.sphinx.profiler.collector:
-        class: %chebur.sphinx.profiler.collector.class%
+        class: '%chebur.sphinx.profiler.collector.class%'
         arguments:
-            - @chebur.sphinx.profiler.logger
+            - '@chebur.sphinx.profiler.logger'
         tags:
             - { name: data_collector, template: "CheburSphinxBundle:Profiler:_data_collector.html.twig", id: "chebur.sphinx"  }
