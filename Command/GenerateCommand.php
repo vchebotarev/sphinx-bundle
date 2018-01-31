@@ -17,9 +17,7 @@ class GenerateCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @return void
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
