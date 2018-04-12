@@ -57,32 +57,43 @@
 
 {% block panel %}
 
-    {% if collector.queries|length > 0 %}
-    <ul>
-        {% for q in collector.queries %}
-            <li>
-                {{ q.sql }}
-                <br>
-                {{ q.time }}
-            </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>
-            Запросов к сфинкс не было
-        </p>
-    {% endif %}
+    <h2>Sphinx</h2>
 
-    {#
-        //todo
-        Выводим
-        - ошибки если таковые были
-        - все запросы по типам и подключениям (билдер или апи)
-            - запрос
-            - время
-            - индекс
-            - ошибка
-        - все подключения со статой
-    #}
+    <div class="metrics">
+        <div class="metric">
+            <span class="value">{{ collector.queries|length }}</span>
+            <span class="label">Total queries</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ '%0.2f'|format(collector.time) }}</span>
+            <span class="label">Query time</span>
+        </div>
+    </div>
+
+    <h3>Queries</h3>
+
+    {% if collector.queries|length == 0 %}
+        <div class="empty">
+            <p>No queries were executed.</p>
+        </div>
+    {% else %}
+        <table class="alt">
+            <thead>
+            <tr>
+                <th class="nowrap">#</th>
+                <th class="nowrap">Time</th>
+                <th style="width:100%">Command</th>
+            </thead>
+            <tbody>
+            {% for q in collector.queries %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="nowrap">{{ '%0.2f'|format(q.time) }} ms</td>
+                    <td>{{ q.sql }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 {% endblock %}
