@@ -48,6 +48,14 @@ class SphinxDataCollector extends DataCollector
     }
 
     /**
+     * @inheritdoc
+     */
+    public function reset()
+    {
+        $this->data = array();
+    }
+
+    /**
      * @return array
      */
     public function getQueries()
