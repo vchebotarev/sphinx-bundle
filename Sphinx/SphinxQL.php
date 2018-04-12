@@ -12,13 +12,8 @@ class SphinxQL extends SphinxQLBase
      */
     public function addSelect($select)
     {
-        if ($this->type != 'select') {
-            return $this->select($select);
-        }
-        $selectSet = is_array($select) ? $select : func_get_args();
-        foreach($selectSet as $selectItem) {
-            $this->select[] = $selectItem;
-        }
+        $select = is_array($select) ? $select : func_get_args();
+        $this->select = array_merge($this->select, $select);
         return $this;
     }
 

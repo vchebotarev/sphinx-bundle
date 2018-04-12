@@ -8,12 +8,33 @@ use Foolz\SphinxQL\Helper as FoolzHelper;
 class Helper extends FoolzHelper
 {
     /**
-     * @param ConnectionInterface $connection
-     * @return static
+     * @var Manager
+     */
+    protected $manager;
+
+    /**
+     * @param Manager $manager
+     */
+    public function __construct(Manager $manager)
+    {
+        $this->manager = $manager;
+        parent::__construct($manager->getConnection());
+    }
+
+    /**
+     * @inheritDoc
      */
     public static function create(ConnectionInterface $connection)
     {
-        return new static($connection);
+        throw new \Exception('Use "new Helper($manager)" syntax if you need new object');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getSphinxQL()
+    {
+        return $this->manager->createQueryBuilder();
     }
 
     /**

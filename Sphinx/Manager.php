@@ -15,6 +15,11 @@ class Manager
     protected $connection;
 
     /**
+     * @var Helper|null
+     */
+    protected $helper;
+
+    /**
      * @param ConnectionDecorator $connection
      */
     public function __construct(ConnectionDecorator $connection)
@@ -36,6 +41,17 @@ class Manager
     public function createQueryBuilder()
     {
         return new SphinxQL($this->connection);
+    }
+
+    /**
+     * @return Helper
+     */
+    public function getHelper()
+    {
+        if ($this->helper === null) {
+            $this->helper = new Helper($this);
+        }
+        return $this->helper;
     }
 
     /**
