@@ -129,7 +129,7 @@ class ConnectionDecorator implements ConnectionInterface
     }
 
     /**
-     * {@inheritdoc }
+     * @inheritdoc
      */
     public function query($query)
     {
@@ -137,12 +137,7 @@ class ConnectionDecorator implements ConnectionInterface
         try {
             $this->logger->startQuery($query);
             $result = $this->connection->query($query);
-        } catch (\Exception $e) {
-            //todo фиксировать и ошибки
-            throw $e;
         } finally {
-            //$meta = $this->connection->query('SHOW META');
-            //todo писать и мету запрос (наверно как один не стоит)
             $this->logger->stopQuery();
         }
 
@@ -150,19 +145,16 @@ class ConnectionDecorator implements ConnectionInterface
     }
 
     /**
-     * {@inheritdoc }
+     * @inheritdoc
      */
-    public function multiQuery(Array $queue)
+    public function multiQuery(array $queue)
     {
-        //todo добавить логирование
         $result = null;
         try {
+            $this->logger->startQuery(implode(';', $queue));
             $result = $this->connection->multiQuery($queue);
-        } catch (\Exception $e) {
-
-            throw $e;
         } finally {
-
+            $this->logger->stopQuery();
         }
 
         return $result;

@@ -5,7 +5,7 @@ namespace Chebur\SphinxBundle\Profiler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class Logger //implements \Doctrine\DBAL\Logging\SQLLogger //not to have dependency on Doctrine
+class Logger
 {
     /**
      * @var Stopwatch
