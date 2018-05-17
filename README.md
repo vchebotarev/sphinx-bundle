@@ -24,6 +24,12 @@ public function registerBundles()
 }
 ```
 
+//todo 
+- config
+- commands
+- sphinx api VS foolz
+- config generating
+
 ## License
 
 See [LICENSE](LICENSE).
