@@ -5,7 +5,7 @@ namespace Chebur\SphinxBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\ProcessBuilder; //todo
 
 class RunCommand extends ContainerAwareCommand
 {
