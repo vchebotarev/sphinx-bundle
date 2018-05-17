@@ -23,11 +23,6 @@ class Logger
     protected $queries = array();
 
     /**
-     * @var array
-     */
-    protected $errors  = array();
-
-    /**
      * @var int
      */
     protected $queryCurrent = 0;
@@ -56,35 +51,23 @@ class Logger
     }
 
     /**
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    /**
-     * @param string     $sql    The SQL to be executed.
-     * @param array|null $params The SQL parameters.
-     * @param array|null $types  The SQL parameter types.
+     * @param string $sql
      * @return void
      */
-    public function startQuery($sql, array $params = null, array $types = null)
+    public function startQuery($sql)
     {
         if ($this->stopwatch) {
             $this->stopwatch->start('sphinx', 'sphinx');
         }
 
         if ($this->logger) {
-            $this->logger->debug($sql, $params === null ? array() : $params);
+            $this->logger->debug($sql);
         }
 
         $this->queryStart = microtime(true);
         $this->queries[$this->queryCurrent] = array(
-            'sql'     => $sql,
-            'params'  => $params,
-            'time'    => 0,
-            //'realSql' => $realSql,
+            'sql'  => $sql,
+            'time' => 0,
         );
 
     }
@@ -97,14 +80,9 @@ class Logger
         if ($this->stopwatch) {
             $this->stopwatch->stop('sphinx');
         }
-
-        $this->queries[$this->queryCurrent]['time'] = microtime(true) - $this->queryStart;
+        $time = round(microtime(true) - $this->queryStart, 5) * 1000;
+        $this->queries[$this->queryCurrent]['time'] = $time;
         $this->queryCurrent++;
-    }
-
-    public function logError()
-    {
-        //todo
     }
 
 }

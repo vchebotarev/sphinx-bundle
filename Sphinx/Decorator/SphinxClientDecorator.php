@@ -159,13 +159,11 @@ class SphinxClientDecorator
      */
     public function query($query, $index = '*', $comment = '')
     {
-        $this->logger->startQuery($query . ' (INDEX - ' . $index . ')');
-        $result = $this->client->Query($query, $index, $comment);
-        $this->logger->stopQuery();
-
-        if ($result === false) {
-            //$lastError = $this->client->getLastError();
-            //todo errors collecting
+        try {
+            $this->logger->startQuery($query . ' (INDEX - ' . $index . ')');
+            $result = $this->client->Query($query, $index, $comment);
+        } finally {
+            $this->logger->stopQuery();
         }
 
         return $result;

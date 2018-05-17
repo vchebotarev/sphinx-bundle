@@ -38,13 +38,11 @@ class SphinxDataCollector extends DataCollector
     {
         $this->data['queries'] = $this->logger->getQueries();
 
-        $this->data['errors']  = $this->logger->getErrors();
-
         $time = 0;
         foreach($this->data['queries'] as $query){
             $time += $query['time'];
         }
-        $this->data['time'] = $time; //todo перепроверить
+        $this->data['time'] = $time;
     }
 
     /**
@@ -61,14 +59,6 @@ class SphinxDataCollector extends DataCollector
     public function getQueries()
     {
         return $this->data['queries'];
-    }
-
-    /**
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->data['errors'];
     }
 
     /**
