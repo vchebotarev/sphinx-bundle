@@ -40,6 +40,7 @@ class CheburSphinxExtension extends Extension
 
             $container->register('chebur.sphinx.manager.'.$connectionName, $container->getParameter('chebur.sphinx.manager.class'))
                 ->addArgument(new Reference('chebur.sphinx.connection.' . $connectionName))
+                ->setPublic(true)
             ;
 
             $names[] = $connectionName;
