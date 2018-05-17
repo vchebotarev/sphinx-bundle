@@ -1,12 +1,13 @@
 {
     "name":        "chebur/sphinx-bundle",
     "type":        "symfony-bundle",
-    "description": "Symfony 2 sphinx bundle with SphinxClient(sphinxapi), SphinxQL, commands, profiling",
+    "description": "Symfony sphinx bundle with SphinxClient(sphinxapi), SphinxQL, commands, profiling",
     "keywords": [
         "sphinx",
         "sphinxsearch",
         "symfony",
-        "symfony2",
+        "symfony3",
+        "symfony4",
         "bundle",
         "sphinxapi",
         "sphinxclient",
@@ -21,10 +22,19 @@
             "email":    "v.yu.chebotarev@mail.ru"
         }
     ],
-    "require": {
-        "foolz/sphinxql-query-builder": "^1.1"
-    },
     "autoload": {
         "psr-4": { "Chebur\\SphinxBundle\\": "" }
+    },
+    "require": {
+        "php": "^7.1",
+
+        "foolz/sphinxql-query-builder": "^1.2",
+        "symfony/console":              "^3.4",
+        "symfony/framework-bundle":     "^3.4",
+        "symfony/process":              "^3.4",
+        "twig/twig":                    "^1.35 || ^2.4.4"
+    },
+    "require-dev": {
+        "symfony/stopwatch": "^3.4"
     }
 }
