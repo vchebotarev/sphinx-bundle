@@ -11,10 +11,8 @@ class RunCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this
-            ->setName('chebur:sphinx:run')
-            ->setDescription('Run sphinx (searchd)')
-        ;
+        $this->setName('chebur:sphinx:run');
+        $this->setDescription('Run sphinx (searchd)');
     }
 
     /**
@@ -35,14 +33,13 @@ class RunCommand extends ContainerAwareCommand
             ->inheritEnvironmentVariables()
             ->setPrefix($config['commands']['bin'] . DIRECTORY_SEPARATOR . 'searchd')
             ->add('--config')
-            ->add($configFile)
-        ;
+            ->add($configFile);
 
         $process = $pb->getProcess();
         $process->start();
         $output->writeln('<info>executing</info> '.$process->getCommandLine());
 
-        while($process->isRunning()) {
+        while ($process->isRunning()) {
             if (!$process->getOutput()) {
                 continue;
             }

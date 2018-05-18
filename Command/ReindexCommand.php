@@ -13,20 +13,18 @@ class ReindexCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this
-            ->setName('chebur:sphinx:reindex')
-            ->setDescription('Reindex sphinx')
-            ->addArgument(
-                'index',
-                InputArgument::IS_ARRAY
-            )
-            ->addOption(
-                'rotate',
-                'r',
-                InputOption::VALUE_NONE,
-                'Rotate or not during reindexing'
-            )
-        ;
+        $this->setName('chebur:sphinx:reindex');
+        $this->setDescription('Reindex sphinx');
+        $this->addArgument(
+            'index',
+            InputArgument::IS_ARRAY
+        );
+        $this->addOption(
+            'rotate',
+            'r',
+            InputOption::VALUE_NONE,
+            'Rotate or not during reindexing'
+        );
     }
 
     /**
@@ -47,10 +45,9 @@ class ReindexCommand extends ContainerAwareCommand
             ->inheritEnvironmentVariables()
             ->setPrefix($config['commands']['bin'] . DIRECTORY_SEPARATOR . 'indexer')
             ->add('--config')
-            ->add($configFile)
-        ;
+            ->add($configFile);
         if (!empty($input->getArgument('index'))) {
-            foreach($input->getArgument('index') as $arg) {
+            foreach ($input->getArgument('index') as $arg) {
                 $pb->add($arg);
             }
         } else {
@@ -65,7 +62,7 @@ class ReindexCommand extends ContainerAwareCommand
         $process->start();
         $output->writeln('<info>executing</info> ' . $process->getCommandLine());
 
-        while($process->isRunning()) {
+        while ($process->isRunning()) {
             if (!$process->getOutput()) {
                 continue;
             }

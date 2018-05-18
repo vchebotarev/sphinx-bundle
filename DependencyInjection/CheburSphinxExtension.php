@@ -2,17 +2,16 @@
 
 namespace Chebur\SphinxBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader;
 
 class CheburSphinxExtension extends Extension
 {
     /**
-     * @param array            $configs
-     * @param ContainerBuilder $container
+     * @inheritdoc
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -24,7 +23,7 @@ class CheburSphinxExtension extends Extension
         $container->setParameter('chebur_sphinx_config', $config);
 
         //Filling in Registry with managers
-        $names       = array();
+        $names       = [];
         $nameDefault = null;
 
         $loggerRef = new Reference('chebur.sphinx.profiler.logger');

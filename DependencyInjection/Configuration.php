@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * @return TreeBuilder
+     * @inheritdoc
      */
     public function getConfigTreeBuilder()
     {
@@ -29,10 +29,10 @@ class Configuration implements ConfigurationInterface
                             ->integerNode('port')->defaultValue(ConnectionDecorator::DEFAULT_PORT)->end()
                             ->integerNode('port_api')->defaultValue(ConnectionDecorator::DEFAULT_PORT_API)->end()
                             ->enumNode('driver')
-                                ->values(array(
+                                ->values([
                                     ConnectionDecorator::DRIVER_MYSQLI,
                                     ConnectionDecorator::DRIVER_PDO,
-                                ))
+                                ])
                                 ->defaultValue(ConnectionDecorator::DRIVER_PDO)
                             ->end()
                             ->booleanNode('default')->defaultValue(false)->end()
@@ -61,7 +61,7 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->arrayNode('parameters')
-                            ->defaultValue(array())
+                            ->defaultValue([])
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')->end()
                         ->end()

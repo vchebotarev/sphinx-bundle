@@ -42,11 +42,11 @@ class Helper extends FoolzHelper
      * @param string $str
      * @return string
      */
-    public static function prepareSearchString($str)
+    public static function prepareSearchString(string $str) : string
     {
-        $keyword = array();
+        $keyword = [];
         $request = preg_split('/[\s,-]+/', $str, 5);
-        $preparedStr       = '';
+        $preparedStr = '';
         if ($request) {
             foreach ($request as $value) {
                 if (strlen($value) > 1) {

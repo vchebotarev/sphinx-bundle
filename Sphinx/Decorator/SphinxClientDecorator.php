@@ -132,7 +132,7 @@ class SphinxClientDecorator
      */
     public function __call($method, $arguments)
     {
-        return call_user_func_array(array($this->client, $method), $arguments);
+        return call_user_func_array([$this->client, $method], $arguments);
     }
 
     /**

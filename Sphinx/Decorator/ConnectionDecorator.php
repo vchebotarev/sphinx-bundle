@@ -64,7 +64,7 @@ class ConnectionDecorator implements ConnectionInterface
 
         $this->logger = $logger;
 
-        switch($type) {
+        switch ($type) {
             case self::DRIVER_MYSQLI:
                 $driver = new MysqliConnection();
                 break;
@@ -77,10 +77,10 @@ class ConnectionDecorator implements ConnectionInterface
                 );
                 break;
         }
-        $driver->setParams(array(
+        $driver->setParams([
             'host' => $host,
             'port' => $port,
-        ));
+        ]);
         $this->connection = $driver;
 
         $this->port    = $port;
@@ -91,7 +91,7 @@ class ConnectionDecorator implements ConnectionInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -99,7 +99,7 @@ class ConnectionDecorator implements ConnectionInterface
     /**
      * @return string
      */
-    public function getHost()
+    public function getHost() : string
     {
         return $this->host;
     }
@@ -107,7 +107,7 @@ class ConnectionDecorator implements ConnectionInterface
     /**
      * @return int
      */
-    public function getPort()
+    public function getPort() : int
     {
         return $this->port;
     }
@@ -115,7 +115,7 @@ class ConnectionDecorator implements ConnectionInterface
     /**
      * @return int
      */
-    public function getPortApi()
+    public function getPortApi() : int
     {
         return $this->portApi;
     }
@@ -123,7 +123,7 @@ class ConnectionDecorator implements ConnectionInterface
     /**
      * @return Logger
      */
-    public function getLogger()
+    public function getLogger() : Logger
     {
         return $this->logger;
     }
@@ -179,7 +179,7 @@ class ConnectionDecorator implements ConnectionInterface
     /**
      * @inheritdoc
      */
-    public function quoteArr(array $array = array())
+    public function quoteArr(array $array = [])
     {
         return $this->connection->quoteArr($array);
     }

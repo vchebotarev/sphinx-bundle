@@ -19,11 +19,11 @@ class Registry
     /**
      * @param ContainerInterface $container
      * @param string[]           $managerNames       Managers with key = name
-     * @param string             $managerNameDefault Instance of default manager
+     * @param string             $managerNameDefault Name of default manager
      */
-    public function __construct($container, array $managerNames, $managerNameDefault)
+    public function __construct(ContainerInterface $container, array $managerNames, string $managerNameDefault)
     {
-        foreach($managerNames as $managerName) {
+        foreach ($managerNames as $managerName) {
             $manager = $container->get('chebur.sphinx.manager.'.$managerName);
             $this->managers[$managerName] = $manager;
             if ($managerName == $managerNameDefault) {
@@ -35,7 +35,7 @@ class Registry
     /**
      * @return Manager[]
      */
-    public function getManagers()
+    public function getManagers() : array
     {
         return $this->managers;
     }
@@ -44,7 +44,7 @@ class Registry
      * @param string|null $name
      * @return Manager|null
      */
-    public function getManager($name = null)
+    public function getManager(string $name = null) : ?Manager
     {
         if ($name === null) {
             return $this->managerDefault;

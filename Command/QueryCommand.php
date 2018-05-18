@@ -13,27 +13,25 @@ class QueryCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this
-            ->setName('chebur:sphinx:query')
-            ->setDescription('Execute sphinx query')
-            ->addArgument(
-                'query',
-                InputArgument::REQUIRED,
-                'Query to execute'
-            )
-            ->addOption(
-                'meta',
-                'm',
-                InputOption::VALUE_NONE,
-                'Execute "SHOW META" after the query'
-            )
-            ->addOption(
-                'connection',
-                'c',
-                InputOption::VALUE_REQUIRED,
-                'Connection name to execute query'
-            )
-        ;
+        $this->setName('chebur:sphinx:query');
+        $this->setDescription('Execute sphinx query');
+        $this->addArgument(
+            'query',
+            InputArgument::REQUIRED,
+            'Query to execute'
+        );
+        $this->addOption(
+            'meta',
+            'm',
+            InputOption::VALUE_NONE,
+            'Execute "SHOW META" after the query'
+        );
+        $this->addOption(
+            'connection',
+            'c',
+            InputOption::VALUE_REQUIRED,
+            'Connection name to execute query'
+        );
     }
 
     /**
@@ -42,32 +40,20 @@ class QueryCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $query = $input->getArgument('query');
-        if (!$query) {
-            $output->writeln('<error>No query to execute</error>');
-            return;
-        }
 
         $managerName = null;
         if ($input->getOption('connection')) {
             $managerName = $input->getOption('connection');
         }
-        $manager = $this
-            ->getContainer()
-            ->get('chebur.sphinx')
-            ->getManager($managerName)
-        ;
+        $manager = $this->getContainer()->get('chebur.sphinx')->getManager($managerName);
         if (!$manager) {
-            $output->writeln('<error>No connection with name "' . $managerName . '"</error>');
+            $output->writeln('<error>No connection with name "' . $managerName . '" found</error>');
             return;
         }
 
-        try{
-            $result = $manager
-                ->createQueryBuilder()
-                ->query($query)
-                ->execute()
-            ;
-        } catch(\Exception $e) {
+        try {
+            $result = $manager->createQueryBuilder()->query($query)->execute();
+        } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return;
         }
@@ -75,8 +61,16 @@ class QueryCommand extends ContainerAwareCommand
         $countFetched  = $result->getCount();
         $countAffected = $result->getAffectedRows();
 
-        $output->writeln('<info>Rows affected:</info> ' . $countAffected);
-        $output->writeln('<info>Rows fetched:</info> ' . $countFetched);
+        if (!$countAffected && !$countFetched) {
+            $output->writeln('<info>No result</info>');
+        } else {
+            if ($countFetched) {
+                $output->writeln('<info>Rows fetched:</info> ' . $countFetched);
+            }
+            if ($countAffected) {
+                $output->writeln('<info>Rows affected:</info> ' . $countAffected);
+            }
+        }
 
         if ($countFetched) {
             $rows = $result->fetchAllAssoc();
@@ -87,12 +81,7 @@ class QueryCommand extends ContainerAwareCommand
         }
 
         if ($input->getOption('meta')) {
-            $result = $manager
-                ->createQueryBuilder()
-                ->query('SHOW META')
-                ->execute()
-            ;
-            $output->writeln('SHOW META');
+            $result = $manager->getHelper()->showMeta()->execute();
             $rows = $result->fetchAllAssoc();
             $table = new Table($output);
             $table->setHeaders(array_keys($rows[0]));

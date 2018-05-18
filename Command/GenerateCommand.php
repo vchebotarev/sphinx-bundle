@@ -10,10 +10,8 @@ class GenerateCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this
-            ->setName('chebur:sphinx:generate')
-            ->setDescription('Renders config template to destination file')
-        ;
+        $this->setName('chebur:sphinx:generate');
+        $this->setDescription('Renders config template to destination file');
     }
 
     /**
@@ -24,11 +22,11 @@ class GenerateCommand extends ContainerAwareCommand
         $sphinxConfig = $this->getContainer()->getParameter('chebur_sphinx_config')['config'];
 
         //Все необходимые данные для постановки
-        $configParams = array(
-            'searchd'     => $sphinxConfig['searchd'],
-            'sources'     => $sphinxConfig['sources'],
-            'parameters'  => $sphinxConfig['parameters'],
-        );
+        $configParams = [
+            'searchd'    => $sphinxConfig['searchd'],
+            'sources'    => $sphinxConfig['sources'],
+            'parameters' => $sphinxConfig['parameters'],
+        ];
         $sphinxConfigTemplate = $sphinxConfig['template'];
 
         //Добавляем в твиг путь возможного расположения шаблона
@@ -53,7 +51,7 @@ class GenerateCommand extends ContainerAwareCommand
             $file              = fopen($sphinxConfig['destination'], 'w+');
             $configContentSize = fwrite($file, $configContent);
             fclose($file);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $output->writeln('<error>Error generating config file</error> ' . $e->getMessage());
             return;
         }

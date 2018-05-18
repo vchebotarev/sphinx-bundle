@@ -11,10 +11,8 @@ class StopCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this
-            ->setName('chebur:sphinx:stop')
-            ->setDescription('Stop sphinx (searchd)')
-        ;
+        $this->setName('chebur:sphinx:stop');
+        $this->setDescription('Stop sphinx (searchd)');
     }
 
     /**
@@ -36,14 +34,13 @@ class StopCommand extends ContainerAwareCommand
             ->setPrefix($config['commands']['bin'] . DIRECTORY_SEPARATOR . 'searchd')
             ->add('--config')
             ->add($configFile)
-            ->add('--stop')
-        ;
+            ->add('--stop');
 
         $process = $pb->getProcess();
         $process->start();
         $output->writeln('<info>executing</info> '.$process->getCommandLine());
 
-        while($process->isRunning()) {
+        while ($process->isRunning()) {
             if (!$process->getOutput()) {
                 continue;
             }

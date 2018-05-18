@@ -39,7 +39,7 @@ class SphinxDataCollector extends DataCollector
         $this->data['queries'] = $this->logger->getQueries();
 
         $time = 0;
-        foreach($this->data['queries'] as $query){
+        foreach ($this->data['queries'] as $query) {
             $time += $query['time'];
         }
         $this->data['time'] = $time;
@@ -50,21 +50,21 @@ class SphinxDataCollector extends DataCollector
      */
     public function reset()
     {
-        $this->data = array();
+        $this->data = [];
     }
 
     /**
      * @return array
      */
-    public function getQueries()
+    public function getQueries() : array
     {
         return $this->data['queries'];
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getTime()
+    public function getTime() : float
     {
         return $this->data['time'];
     }

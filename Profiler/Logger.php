@@ -20,7 +20,7 @@ class Logger
     /**
      * @var array
      */
-    protected $queries = array();
+    protected $queries = [];
 
     /**
      * @var int
@@ -30,7 +30,7 @@ class Logger
     /**
      * @var int
      */
-    protected $queryStart;
+    protected $queryStartTime;
 
     /**
      * @param LoggerInterface|null $logger
@@ -45,16 +45,17 @@ class Logger
     /**
      * @return array
      */
-    public function getQueries()
+    public function getQueries() : array
     {
         return $this->queries;
     }
 
     /**
+     * @todo check previous stopped
      * @param string $sql
      * @return void
      */
-    public function startQuery($sql)
+    public function startQuery(string $sql) : void
     {
         if ($this->stopwatch) {
             $this->stopwatch->start('sphinx', 'sphinx');
@@ -64,23 +65,24 @@ class Logger
             $this->logger->debug($sql);
         }
 
-        $this->queryStart = microtime(true);
-        $this->queries[$this->queryCurrent] = array(
+        $this->queryStartTime = microtime(true);
+        $this->queries[$this->queryCurrent] = [
             'sql'  => $sql,
             'time' => 0,
-        );
+        ];
 
     }
 
     /**
+     * @todo check has started
      * @return void
      */
-    public function stopQuery()
+    public function stopQuery() : void
     {
         if ($this->stopwatch) {
             $this->stopwatch->stop('sphinx');
         }
-        $time = round(microtime(true) - $this->queryStart, 5) * 1000;
+        $time = round(microtime(true) - $this->queryStartTime, 5) * 1000;
         $this->queries[$this->queryCurrent]['time'] = $time;
         $this->queryCurrent++;
     }

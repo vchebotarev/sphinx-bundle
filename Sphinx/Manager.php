@@ -30,7 +30,7 @@ class Manager
     /**
      * @return SphinxClientDecorator
      */
-    public function createSphinxApi()
+    public function createSphinxApi() : SphinxClientDecorator
     {
         return new SphinxClientDecorator($this->connection);
     }
@@ -38,7 +38,7 @@ class Manager
     /**
      * @return SphinxQL
      */
-    public function createQueryBuilder()
+    public function createQueryBuilder() : SphinxQL
     {
         return new SphinxQL($this->connection);
     }
@@ -46,7 +46,7 @@ class Manager
     /**
      * @return Helper
      */
-    public function getHelper()
+    public function getHelper() : Helper
     {
         if ($this->helper === null) {
             $this->helper = new Helper($this);
@@ -57,7 +57,7 @@ class Manager
     /**
      * @return ConnectionDecorator
      */
-    public function getConnection()
+    public function getConnection() : ConnectionDecorator
     {
         return $this->connection;
     }
