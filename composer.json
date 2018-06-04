@@ -28,7 +28,7 @@
     "require": {
         "php": "^7.1",
 
-        "foolz/sphinxql-query-builder": "^1.2",
+        "foolz/sphinxql-query-builder": "^2.0",
         "symfony/console":              "^3.4",
         "symfony/framework-bundle":     "^3.4",
         "symfony/process":              "^3.4",
